@@ -3,23 +3,20 @@ package com.syncretis;
 import java.util.Queue;
 
 public class Producer extends Thread {
-    final int maxQueueLength;
-    Queue<Integer> queue;
+    private MyQueue myQueue;
 
-    public Producer(int maxQueueLength, Queue<Integer> queue) {
-        this.maxQueueLength = maxQueueLength;
-        this.queue = queue;
+    public Producer(MyQueue myQueue) {
+        this.myQueue = myQueue;
     }
 
     @Override
     public void run() {
         while (true) {
-            if (queue.size() < maxQueueLength) {
-                queue.add(1);
-            } else {
-                System.out.println("Can't add!");
+            try {
+                myQueue.get();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            System.out.println("Current size = " + queue.size());
         }
     }
 }
